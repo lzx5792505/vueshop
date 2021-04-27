@@ -1,0 +1,68 @@
+@import "./normalize.css";
+
+:root {
+    --color-text:#666;
+    --color-high-text:#42bBaa;
+    --color-tint:#42b983;
+    --color-background:#ffffff;
+    --color-a:#2c3e50;
+    --font-size:12px;
+    --font-size-14:14px;
+    --line-height:1.5;
+}
+
+*,
+*::before,*::after {
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    user-select: none; /* 禁止用户选中文件，图片 */
+    background-color: var(--color-background);
+    color: var(--color-text);
+    width: 100vw;
+}
+
+a {
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+.w100{
+    width: 100vw;
+}
+
+.h100{
+    height: 100vh;
+}
+
+.flex {
+    display: -webkit-flex; /* Safari */
+    display: flex;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.flex-wrap {
+    flex-wrap:wrap
+}
+
+.justify-content {
+    justify-content: center;
+}
+
+.justify-around{
+    justify-content: space-around;
+}
+
+.align-content {
+    align-content: center;
+}
+
+.align-items {
+    align-items: center;
+}
