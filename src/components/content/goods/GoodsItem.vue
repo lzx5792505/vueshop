@@ -1,5 +1,5 @@
 <template>
-  <div class="goods-item">
+  <div class="goods-item" @click="goToDetail(product.id)">
         <img v-lazy="product.cover_url" alt="" srcset="">
         <div class="goods-info">
             <p class="flex justify-content">
@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { useRouter } from 'vue-router'
 export default {
   name: 'GoodsItem',
   props:{
@@ -23,10 +24,13 @@ export default {
       }
   },
   setup() {
+      let router = useRouter();
      
     //返回数据
     return {
-        
+        goToDetail:(id)=>{
+            router.push({path:'/detail',query:{id}})
+        }
     }
   },
 }

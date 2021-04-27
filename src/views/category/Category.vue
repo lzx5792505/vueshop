@@ -39,6 +39,7 @@
                 :title="item.title"
                 :thumb="item.cover_url"
                 :lazy-load="true"
+                @click="goToDetail(item.id)"
               />
             </div>
           </div>
@@ -54,6 +55,7 @@ import NavBar from 'components/common/navbar/NavBar';
 import BackTop from 'components/common/backtop/BackTop';
 import {getCategory, getCategoryGoods} from 'services/category';
 import {computed, nextTick, onMounted, reactive, ref, watchEffect} from 'vue';
+import { useRouter } from 'vue-router';
 export default {
   name: 'Category',
   
@@ -63,6 +65,7 @@ export default {
   },
 
   setup() {
+    let router = useRouter();
     let activeKey = ref(0);
     let activeName = ref(1);
     let active = ref(1);
@@ -174,7 +177,10 @@ export default {
       showGoods,
       bscroll,
       isShowBackTop,
-      topBok
+      topBok,
+      goToDetail:(id) => {
+        router.push({path:'/detail',query:{id}})
+      }
     }
   },
 }
