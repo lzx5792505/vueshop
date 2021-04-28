@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Notify } from 'vant';
 
 export function request(config){
     const instance = axios.create({
@@ -7,7 +8,7 @@ export function request(config){
     });
 
     // 请求拦截
-    instance.interceptors.request.use(config=>{
+    instance.interceptors.request.use(config => {
         //认证接口
         return config;
     },err=>{
@@ -15,11 +16,12 @@ export function request(config){
     });
 
     // 响应拦截
-    instance.interceptors.response.use(res=>{
+    instance.interceptors.response.use(res => {
         //授权接口（登录）
         return res.data ? res.data : res;
-    },err=>{
-        return err;
+    },err => {
+        //返回错误提示
+        Notify({ type: 'warning', message: err.response.data.errors[Object.keys(err.response.data.errors)[0]][0]});
     });
 
     return instance(config);

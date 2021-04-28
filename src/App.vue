@@ -1,12 +1,14 @@
 <template>
-  <router-view v-slot="{ Component }">
+  <!-- <router-view v-slot="{ Component }">
     <transition>
       <keep-alive>
         <component :is="Component"/>
       </keep-alive>
     </transition>
-  </router-view>
-  <!-- <router-view/> -->
+  </router-view> -->
+  
+  <router-view/>
+
   <div id="nav" class="flex align-content align-items">
     <router-link class="tab-item flex flex-column justify-content" to="/">
       <div><i class="iconfont icon-huabanfuben1"></i></div>

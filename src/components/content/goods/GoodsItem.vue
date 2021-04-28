@@ -24,7 +24,7 @@ export default {
       }
   },
   setup() {
-      let router = useRouter();
+    let router = useRouter();
      
     //返回数据
     return {
