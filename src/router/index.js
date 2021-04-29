@@ -1,10 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { Toast } from 'vant';
+import  store  from '../store';
 const Home = () => import('../views/home/Home');
 const Category = () => import('../views/category/Category');
 const Detail = () => import('../views/detail/Detail');
 const Profile = () => import('../views/profile/Profile');
 const ShopCart = () => import('../views/shopcart/ShopCart');
 const Register = () => import('../views/profile/Register');
+const Login = () => import('../views/profile/Login');
 
 const routes = [
   {
@@ -44,7 +47,8 @@ const routes = [
     name: 'Profile',
     component: Profile,
     meta:{
-      title:'图书商城-个人中心'
+      title:'图书商城-个人中心',
+      isAuthrequired:true
     }
   },
   {
@@ -52,7 +56,8 @@ const routes = [
     name: 'ShopCart',
     component: ShopCart,
     meta:{
-      title:'图书商城-购物车'
+      title:'图书商城-购物车',
+      isAuthrequired:true
     }
   },
   {
@@ -61,6 +66,14 @@ const routes = [
     component: Register,
     meta:{
       title:'图书商城-注册'
+    }
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+    meta:{
+      title:'图书商城-登录'
     }
   },
 ]
@@ -72,7 +85,12 @@ const router = createRouter({
 
 router.beforeEach((to,from,next)=>{
   //没有登录 到login
-  next();
+  if(to.meta.isAuthrequired && store.state.user.isLogin === false){
+    Toast.success('请登录');
+    return next('/login');
+  }else{
+    next();
+  }
   document.title = to.meta.title;
 });
 

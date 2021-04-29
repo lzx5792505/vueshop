@@ -1,7 +1,7 @@
 <template>
     <div>
         <nav-bar>
-            <template v-slot:default>用户注册</template>
+            <template v-slot:default>登录</template>
         </nav-bar>
         <div class="user-top w100 flex justify-content">
             <van-image
@@ -14,13 +14,6 @@
         </div>
 
          <van-form @submit="onSubmit" class="user-top">
-            <van-field
-                v-model="name"
-                name="用户名"
-                label="用户名"
-                placeholder="用户名"
-                :rules="[{ required: true, message: '请填写用户名' }]"
-            />
             <van-field
                 v-model="email"
                 name="电子邮箱"
@@ -36,17 +29,9 @@
                 placeholder="密码"
                 :rules="[{ required: true, message: '请填写密码' }]"
             />
-            <van-field
-                v-model="password_confirmation"
-                type="password"
-                name="确认密码"
-                label="确认密码"
-                placeholder="确认密码"
-                :rules="[{ required: true, message: '请填写一致密码' }]"
-            />
             <div style="margin: 16px;" class="flex flex-column justify-content align-content align-items">
-                <div class="like_info" @click="$router.push({path:'/login'})">
-                    已有账号，立即登录
+                <div class="like_info" @click="$router.push({path:'/register'})">
+                    没有账号，立即注册
                 </div>
                 <van-button round block type="info" color="#42bBaa" native-type="submit">提交</van-button>
             </div>
@@ -57,43 +42,39 @@
 <script>
 
 import NavBar from 'components/common/navbar/NavBar';
-import { register } from 'services/user';
+import { login } from 'services/user';
 import { reactive, toRefs } from 'vue';
-import { Notify, Toast } from 'vant';
+import { Toast } from 'vant';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 export default {
-  name: 'Register',
+  name: 'Login',
   components:{
     NavBar
   },
   setup() {
     let router = useRouter();
+    let store =  useStore();
     //用户信息
     let userInfo = reactive({
-        name:'',
         email:'',
         password:'',
-        password_confirmation:'',
-
     });
     //提交
     let onSubmit = ()=>{
-        if(userInfo.password != userInfo.password_confirmation){
-            Notify({ type: 'warning', message: '两次密码不一致' });
-        }else{
-            register(userInfo).then(res => {
-                if(res.status == '201'){
-                    Toast.success('注册成功');
-                    setTimeout(() => {
-                        router.push({path:'/login'});
-                    }, 1000);
-                }
-
-                userInfo.password = '';
-                userInfo.password_confirmation = '';
-            });
-        }
+      login(userInfo).then(res => {
+          window.localStorage.setItem('u_token',res.access_token);
+          //设置状态
+          store.commit('setIsLogin',true);
+          
+          Toast.success('登录成功');
+          userInfo.email = '';
+          userInfo.password = '';
+          setTimeout(()=>{
+            router.go(-1);
+          },500);
+      }); 
     }
     //返回数据
     return {
