@@ -6,7 +6,8 @@ import getters from './getters'
 const state = {
   user:{
     isLogin:window.localStorage.getItem('u_token') ? true : false
-  }
+  },
+  cartCount:0
 }
 
 export default createStore({

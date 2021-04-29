@@ -8,7 +8,8 @@
 
 <script>
 
-import NavBar from 'components/common/navbar/NavBar'
+import NavBar from 'components/common/navbar/NavBar';
+import { getCart } from 'services/cart';
 
 export default {
   name: 'ShopCart',
@@ -18,9 +19,16 @@ export default {
   },
 
   setup() {
-    
+    let cart = () =>{
+      getCart().then(res => {
+        console.log(res);
+      }).catch(err => {
+        console.log(err);
+      });
+    }
     //返回数据
     return {
+      cart
     }
   },
 }

@@ -22,8 +22,8 @@
             <van-tag plain type="danger">{{ detail.is_recommend == 1 ? '推荐': '新书' }}</van-tag>
           </template>
           <template #footer>
-            <van-button type="warning">加入购物车</van-button>
-            <van-button type="danger">立即购买</van-button>
+            <van-button type="warning" @click="handleAddCart">加入购物车</van-button>
+            <van-button type="danger" @click="goToCart">立即购买</van-button>
           </template>
         </van-card>
 
@@ -49,8 +49,11 @@
 import NavBar from 'components/common/navbar/NavBar';
 import GoodsList from 'components/content/goods/GoodsList';
 import { getGoodsDateil } from 'services/detail';
-import { useRoute } from 'vue-router';
+import { addCart } from 'services/cart';
+import { useRoute, useRouter } from 'vue-router';
 import { onMounted, reactive, ref, toRefs } from 'vue';
+import { Toast } from 'vant';
+import { useStore } from 'vuex';
 export default {
   name: 'Detail',
   components:{
@@ -60,8 +63,11 @@ export default {
 
   setup() {
     let route = useRoute();
+    let routes = useRouter();
     let ids = ref(0);
     let active = ref(2);
+    let store = useStore();
+
     //详情数据
     let goodsList = reactive({
       detail:{},
@@ -79,11 +85,41 @@ export default {
         console.log(err);
       });
     });
+
+    //加入购物车
+    let handleAddCart = ()=>{
+      addCart({goods_id:goodsList.detail.id,num:1}).then(res=>{
+        if(res.status == '204' || res.status == '201'){
+          Toast.success('添加商品成功');
+          //设置 
+          store.dispatch('updateCart');
+        }
+      }).catch(err => {
+        console.log(err)
+      });
+    };
+
+    //直接购买
+    let goToCart = () => {
+      addCart({goods_id:goodsList.detail.id,num:1}).then(res=>{
+        if(res.status == '204' || res.status == '201'){
+          Toast.success('添加商品成功'); 
+          //设置 
+          store.dispatch('updateCart');
+          routes.push({path:'/shopcart'});
+        }
+      }).catch(err => {
+        console.log(err)
+      });
+    }
+
     //返回数据
     return {
       ids,
       active,
       ...toRefs(goodsList),
+      handleAddCart,
+      goToCart
     }
   },
 }

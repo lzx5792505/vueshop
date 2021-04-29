@@ -20,7 +20,7 @@
     </router-link>
     <router-link class="tab-item flex flex-column justify-content" to="/shopcart">
       <div>
-        <van-badge :content="0" max="9">
+        <van-badge :content="$store.state.cartCount" max="9">
           <i class="iconfont icon-gouwuche"></i>
         </van-badge>
       </div>
