@@ -33,6 +33,24 @@
   </div>
 </template>
 
+<script>
+import { onMounted } from 'vue';
+import { useStore } from 'vuex';
+
+export default {
+  setup() {
+    let store = useStore();
+    onMounted(()=>{
+      store.dispatch('updateCart');
+    });
+
+    //返回数据
+    return {
+    }
+  },
+}
+</script>
+
 <style lang="scss">
 
 @import  "assets/css/global.css";

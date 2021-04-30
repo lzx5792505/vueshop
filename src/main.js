@@ -6,7 +6,8 @@ import 'vant/lib/index.css'
 import { 
     Swipe, SwipeItem, Lazyload, Badge, Sidebar, SidebarItem, 
     Collapse, CollapseItem, Tab, Tabs, Card, Image as VanImage, 
-    Tag, Button, Form, Field 
+    Tag, Button, Form, Field, Checkbox, CheckboxGroup,Stepper,
+    SwipeCell,SubmitBar 
 } from 'vant'
 
 createApp(App)
@@ -25,6 +26,11 @@ createApp(App)
     .use(Button)
     .use(Form)
     .use(Field)
+    .use(Checkbox)
+    .use(CheckboxGroup)
+    .use(Stepper)
+    .use(SwipeCell)
+    .use(SubmitBar)
     .use(Lazyload,{
         // loading:require('assets/images/demo.jpg')
     })
