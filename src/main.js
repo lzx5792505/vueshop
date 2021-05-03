@@ -7,7 +7,7 @@ import {
     Swipe, SwipeItem, Lazyload, Badge, Sidebar, SidebarItem, 
     Collapse, CollapseItem, Tab, Tabs, Card, Image as VanImage, 
     Tag, Button, Form, Field, Checkbox, CheckboxGroup,Stepper,
-    SwipeCell,SubmitBar 
+    SwipeCell,SubmitBar, Icon
 } from 'vant'
 
 createApp(App)
@@ -31,6 +31,7 @@ createApp(App)
     .use(Stepper)
     .use(SwipeCell)
     .use(SubmitBar)
+    .use(Icon)
     .use(Lazyload,{
         // loading:require('assets/images/demo.jpg')
     })
