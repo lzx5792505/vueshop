@@ -23,4 +23,11 @@ export function logout(){
     });
 }
 
+export function getUser(){
+    return request({
+        url:'/api/user',
+    });
+}
+
+
 

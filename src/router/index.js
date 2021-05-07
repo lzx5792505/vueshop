@@ -8,6 +8,10 @@ const Profile = () => import('../views/profile/Profile');
 const ShopCart = () => import('../views/shopcart/ShopCart');
 const Register = () => import('../views/profile/Register');
 const Login = () => import('../views/profile/Login');
+const Address = () => import('../views/profile/Address');
+const Addedit = () => import('../views/profile/Addressedit');
+const Orders = () => import('../views/orders/Orders');
+
 
 const routes = [
   {
@@ -74,6 +78,30 @@ const routes = [
     component: Login,
     meta:{
       title:'图书商城-登录'
+    }
+  },
+  {
+    path: '/address',
+    name: 'Address',
+    component: Address,
+    meta:{
+      title:'图书商城-地址管理'
+    }
+  },
+  {
+    path: '/addedit',
+    name: 'Addedit',
+    component: Addedit,
+    meta:{
+      title:'图书商城-地址编辑'
+    }
+  },
+  {
+    path: '/orders',
+    name: 'Orders',
+    component: Orders,
+    meta:{
+      title:'图书商城-订单管理'
     }
   },
 ]

@@ -9,31 +9,31 @@
           <div class="info">
             <img src="~assets/images/demo.jpg" alt="" srcset="">
             <div class="user-desc">
-              <span>昵称：996icu</span>
-              <span>登录名：cxcx</span>
-              <span class="name">个性签名：XXOO爽</span>
+              <span>昵称：{{ user.name }}</span>
+              <span>登录名：{{ user.email }}</span>
+              <span class="name">个性签名：......</span>
             </div>
           </div>
         </div>
 
         <ul class="user-list">
-          <li class="van-hairline-bottom">
+          <li class="van-hairline-bottom" @click="goToPath('/collect')">
             <span>我的收藏</span>
             <van-icon name="arrow" />
           </li>
-          <li class="van-hairline-bottom">
+          <li class="van-hairline-bottom" @click="goToPath('/orders')">
             <span>我的订单</span>
             <van-icon name="arrow" />
           </li>
-          <li class="van-hairline-bottom">
+          <li class="van-hairline-bottom" @click="goToPath('/setting')">
             <span>账号管理</span>
             <van-icon name="arrow" />
           </li>
-          <li class="van-hairline-bottom">
+          <li class="van-hairline-bottom" @click="goToPath('/address')">
             <span>地址管理</span>
             <van-icon name="arrow" />
           </li>
-          <li class="van-hairline-bottom">
+          <li class="van-hairline-bottom" @click="goToPath('/about')">
             <span>关于我们</span>
             <van-icon name="arrow" />
           </li>
@@ -50,9 +50,10 @@
 
 import NavBar from 'components/common/navbar/NavBar';
 import { useRouter } from 'vue-router';
-import { logout } from 'services/user';
+import { logout, getUser } from 'services/user';
 import { Toast } from 'vant';
 import { useStore } from 'vuex';
+import { onMounted, reactive, toRefs } from 'vue';
 
 export default {
   name: 'Profile',
@@ -63,7 +64,11 @@ export default {
 
   setup() {
     let router = useRouter();
-     let store =  useStore();
+    let store =  useStore();
+    //用户信息
+    let userinfo = reactive({
+      user:{}
+    });
 
     let logOut = () =>{
       logout().then(res=>{
@@ -73,16 +78,31 @@ export default {
           window.localStorage.setItem('u_token','');
           //设置状态
           store.commit('setIsLogin',false);
-          
           setTimeout(() => {
             router.push({path:'/home'});
           },500);
         }
       });
     }
+
+    //公用跳转
+    let goToPath = (path,query) =>{
+      router.push({path, query:query || {} });
+    }
+
+    onMounted(()=>{
+      getUser().then(res => {
+        userinfo.user = res
+      }).catch(err => {
+          console.log(err);
+      })
+    });
+
     //返回数据
     return {
-      logOut
+      logOut,
+      goToPath,
+      ...toRefs(userinfo)
     }
   },
 }
@@ -94,7 +114,7 @@ export default {
     height:calc(100vh - 89px);
   }
 
-  .user-box{
+  .user-box{  
     margin-top: 65px;
     .user-header{
       position: fixed;
