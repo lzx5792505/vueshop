@@ -21,7 +21,7 @@
             <span>我的收藏</span>
             <van-icon name="arrow" />
           </li>
-          <li class="van-hairline-bottom" @click="goToPath('/orders')">
+          <li class="van-hairline-bottom" @click="goToPath('/orderlist')">
             <span>我的订单</span>
             <van-icon name="arrow" />
           </li>

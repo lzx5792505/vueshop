@@ -48,19 +48,16 @@
                 :style="{ height: '40%' }"
                 @close="close"
         >
-
             <van-grid :border="false" :column-num="2">
                 <van-grid-item>
                     支付宝二维码<br>
-                    <van-image width="150" height="150" :src="aliyun" />
+                    <van-image width="150" height="150" :src="payUrl" />
                 </van-grid-item>
                 <van-grid-item>
                     微信二维码<br>
-                    <van-image width="150" height="150" :src="wechat" />
+                    <van-image width="150" height="150" :src="weChatUrl" />
                 </van-grid-item>
-
             </van-grid>
-
         </van-popup>
     </div>
 </template>
@@ -68,8 +65,9 @@
 <script>
 import NavBar from "components/common/navbar/NavBar";
 import { useRouter, } from 'vue-router';
+import { useStore } from 'vuex';
 import { computed, onMounted, reactive, toRefs } from 'vue';
-import { getOrderInfo, createOrders } from 'services/orders';
+import { getOrderInfo, createOrders, payOrders, payOrderStatus } from 'services/orders';
 import { Toast } from 'vant';
 export default {
   name: 'Orders',
@@ -80,9 +78,14 @@ export default {
 
   setup() {
     let router = useRouter();
+    let store = useStore();
     let data = reactive({
       cartList:[],
       address:{},
+      showPay:false,
+      orderNo:'',
+      payUrl:'',
+      weChatUrl:'',
     });
 
     let initData = () =>{
@@ -91,7 +94,7 @@ export default {
         let address = res.address.filter(n => n.is_default == '1');
         if(address.length == 0){
           data.address = {
-            address:'还没有默认地址，请选择或添加地址信息'
+            address:'还没有默认地址，请选择或添加地址信息',
           }
         }else{
           data.address = address[0];
@@ -122,13 +125,44 @@ export default {
     //生成订单
     let handleCreateOrder = () =>{
       let params = {
-
+          address_id : data.address.id
       }
-      createOrders(params).then();
+      createOrders(params).then( res =>{
+        Toast.success('创建订单成功');
+        store.dispatch('updateCart'); //更新vuex购物车数据
+        //显示支付
+        data.showPay =  true;
+        //订单号
+        data.orderNo = res.id;
+        //支付宝二维码
+        payOrders(data.orderNo,{type:'aliyun'}).then(res => {
+            data.payUrl = res.qr_code_url;
+            data.weChatUrl = res.qr_code_url;
+        });
+        //微信二维码
+        // payOrders(data.orderNo,{type:'weChat'}).then(res => {
+        //     data.weChatUrl = res.qr_code_url
+        // });
+
+        //支付成功，轮询查看
+        let timer = setInterval(() => {
+            payOrderStatus(data.orderNo).then(res => {
+                if(res == '2'){
+                    clearInterval(timer);
+                    router.push({path:'/orderdetail',query:{id:data.orderNo}});
+                }
+            });
+        }, 1500);
+      });
+    }
+
+    let close = () =>{
+        router.push({path:'/orderdetail',query:{id:data.orderNo}});
     }
 
     return {
       total,
+      close,
       goToAddress,
       ...toRefs(data),
       handleCreateOrder

@@ -11,6 +11,8 @@ const Login = () => import('../views/profile/Login');
 const Address = () => import('../views/profile/Address');
 const Addedit = () => import('../views/profile/Addressedit');
 const Orders = () => import('../views/orders/Orders');
+const Orderlist = () => import('../views/orders/Orderlist');
+const Orderdetail = () => import('../views/orders/Orderdetail');
 
 
 const routes = [
@@ -102,6 +104,22 @@ const routes = [
     component: Orders,
     meta:{
       title:'图书商城-订单管理'
+    }
+  },
+  {
+    path: '/orderlist',
+    name: 'Orderlist',
+    component: Orderlist,
+    meta:{
+      title:'图书商城-订单列表'
+    }
+  },
+  {
+    path: '/orderdetail',
+    name: 'Orderdetail',
+    component: Orderdetail,
+    meta:{
+      title:'图书商城-订单详情'
     }
   },
 ]
