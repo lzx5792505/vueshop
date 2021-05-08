@@ -22,7 +22,7 @@
 <script>
 import NavBar from 'components/common/navbar/NavBar';
 import { useRouter, useRoute } from 'vue-router';
-import { addAddress, getAddressInfo } from 'services/address';
+import { addAddress, getAddressInfo, editAddress, delAddress } from 'services/address';
 import { onMounted, reactive, toRefs } from 'vue';
 import { tdist } from 'utils/address';
 import { Toast } from 'vant';
@@ -129,17 +129,34 @@ export default {
                 city:context.city,
                 county:context.county,
                 address:context.addressDetail,
-                is_default:context.is_default ? 1 : 0,
+                is_default:context.isDefault ? 1 : 0,
             }
-            addAddress(params);
-            Toast.success('添加成功');
+            switch(data.type) {
+                case 'add':
+                    addAddress(params);
+                    break;
+                case 'edit':
+                    editAddress(data.addressId,params);
+                    break;
+            } 
+            Toast.success('保存成功');
             setTimeout(() =>{
                 router.back();
             },500)
         }
+
+        let  onDelete = () => {
+            delAddress(data.addressId).then( function() {
+                Toast.success('删除成功');
+                setTimeout(() =>{
+                    router.back();
+                },500)
+            });
+        }
         
         return{
             onSave,
+            onDelete,
             ...toRefs(data)
         }
     }
